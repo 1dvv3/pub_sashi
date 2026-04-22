@@ -1,0 +1,154 @@
+/* CSS Design System for Sashi D&D Character Sheet */
+/* Mobile-First Approach */
+
+/* CSS Custom Properties (Variables) */
+:root {
+    --bg-base: #1a1a1d;
+    --bg-card: #2a2a2f;
+    --accent: #c49b63;
+    --text-primary: #e8e8e8;
+    --text-muted: #8a8a8a;
+    --border-radius: 8px;
+    --spacing-unit: 16px;
+    --touch-target: 44px;
+    --font-size-base: clamp(1rem, 2.5vw, 1.125rem);
+}
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+}
+
+/* Container */
+.container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: var(--spacing-unit);
+}
+
+/* Tab Navigation */
+.tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: var(--spacing-unit);
+    margin-bottom: var(--spacing-unit);
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    scrollbar-width: thin; /* Firefox */
+}
+
+.tab {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: var(--spacing-unit) 0;
+    min-width: var(--touch-target);
+    text-align: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.tab:hover {
+    color: var(--text-primary);
+}
+
+.tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Touch Targets */
+button, input, select, .clickable {
+    min-height: var(--touch-target);
+}
+
+/* Form Elements */
+input[type="number"],
+select {
+    background-color: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    padding: 0 var(--spacing-unit);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Buttons */
+button {
+    background-color: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+button:active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Accent Button */
+button.accent {
+    background-color: var(--accent);
+    color: var(--bg-base);
+}
+
+button.accent:hover {
+    background-color: #b88e55;
+}
+
+/* Card/Section Styling */
+.section {
+    background-color: var(--bg-card);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-unit);
+    margin-bottom: var(--spacing-unit);
+}
+
+/* Accessibility: Reduce Motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
