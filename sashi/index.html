@@ -19,29 +19,87 @@
 
         <!-- Tab Content -->
         <section class="tab-content active" id="overview-tab">
-            <!-- Overview content will go here -->
             <h1>Character Overview</h1>
-            <p>Overview section</p>
+            <div class="section">
+                <p><strong>Name:</strong> <span id="char-name">Unnamed</span></p>
+                <p><strong>Class:</strong> <span id="char-class">---</span> &nbsp; <strong>Level:</strong> <span id="char-level">1</span></p>
+                <p><strong>Background:</strong> <span id="char-background">---</span></p>
+                <p><strong>Race:</strong> <span id="char-race">---</span> &nbsp; <strong>Alignment:</strong> <span id="char-alignment">---</span></p>
+                <p><strong>Experience Points:</strong> <span id="char-xp">0</span></p>
+            </div>
         </section>
         <section class="tab-content" id="stats-tab">
-            <!-- Stats content will go here -->
-            <h1>Stats</h1>
-            <p>Stats section</p>
+            <h1>Ability Scores</h1>
+            <div class="section">
+                <p><strong>Point Buy Remaining:</strong> <span id="point-buy-remaining">27</span></p>
+                <div id="stats-container">
+                    <!-- Stats will be injected here by JS -->
+                </div>
+            </div>
         </section>
         <section class="tab-content" id="combat-tab">
-            <!-- Combat content will go here -->
             <h1>Combat</h1>
-            <p>Combat section</p>
+            <div class="section">
+                <div>
+                    <p><strong>Armor Class:</strong> <span id="ac-value">10</span></p>
+                    <p><strong>Initiative:</strong> <span id="initiative-value">0</span></p>
+                    <p><strong>Speed:</strong> <span id="speed-value">30 ft.</span></p>
+                </div>
+                <div>
+                    <p><strong>Hit Points:</strong> <span id="hp-current">10</span> / <span id="hp-max">10</span></p>
+                    <p><strong>Temporary HP:</strong> <span id="temp-hp">0</span></p>
+                    <div>
+                        <button id="hp-heal-5">Heal 5</button>
+                        <button id="hp-heal-2">Heal 2</button>
+                        <button id="hp-damage-2">Damage 2</button>
+                        <button id="hp-damage-5">Damage 5</button>
+                    </div>
+                    <div>
+                        <label for="temp-hp-input">Set Temp HP: </label>
+                        <input type="number" id="temp-hp-input" min="0">
+                        <button id="set-temp-hp">Set</button>
+                    </div>
+                </div>
+            </div>
         </section>
         <section class="tab-content" id="progression-tab">
-            <!-- Progression content will go here -->
             <h1>Progression</h1>
-            <p>Progression section</p>
+            <div class="section">
+                <p><strong>Level:</strong> <span id="prog-level">1</span></p>
+                <p><strong>Proficiency Bonus:</strong> <span id="prog-proficiency">+2</span></p>
+                <p><strong>Experience Points:</strong> <span id="prog-xp">0</span> / <span id="prog-xp-next">300</span></p>
+            </div>
+            <div class="section">
+                <h3>Death Saves</h3>
+                <div>
+                    <span>Successes: </span>
+                    <span id="death-saves-success">0</span> / 3
+                </div>
+                <div>
+                    <span>Failures: </span>
+                    <span id="death-saves-failure">0</span> / 3
+                </div>
+                <div id="death-saves-status"></div>
+            </div>
         </section>
         <section class="tab-content" id="storage-tab">
-            <!-- Storage content will go here -->
             <h1>Storage</h1>
-            <p>Storage section</p>
+            <div class="section">
+                <p><strong>Session Mode:</strong> <span id="session-mode">Campaign</span></p>
+                <button id="toggle-session-mode">Toggle Mode</button>
+            </div>
+            <div class="section">
+                <h3>Save & Load</h3>
+                <button id="save-character">Save Character</button>
+                <button id="load-character">Load Character</button>
+                <button id="clear-character">Clear Character</button>
+            </div>
+            <div class="section">
+                <h3>JSON Export/Import</h3>
+                <button id="export-json">Export as JSON</button>
+                <input type="file" id="import-json" accept=".json">
+                <button id="import-json-button">Import JSON</button>
+            </div>
         </section>
     </div>
     <script type="module" src="js/app.js"></script>

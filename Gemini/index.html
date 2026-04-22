@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sashi — D&D 5e Character Sheet</title>
+  <meta name="description" content="Mobile-responsive D&D 5e digital character sheet with point-buy creation, real-time modifiers, combat tracking, and persistent storage.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header id="app-header" class="app-header">
+    <div class="header-glow"></div>
+    <h1 class="logo">Sashi</h1>
+    <p class="subtitle">D&D 5e Character Sheet</p>
+  </header>
+
+  <nav id="tab-bar" class="tab-bar" role="tablist" aria-label="Character sheet sections"></nav>
+
+  <main id="main-content" class="container" aria-live="polite"></main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
