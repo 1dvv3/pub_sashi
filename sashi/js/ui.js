@@ -79,7 +79,7 @@ const charAlignmentEl = document.getElementById('char-alignment');
 const charXpEl = document.getElementById('char-xp');
 
 // Initialize the UI
-function initUI() {
+export function initUI() {
   // Set up tab switching
   Object.keys(tabs).forEach(tabKey => {
     tabs[tabKey].addEventListener('click', () => switchTab(tabKey));
