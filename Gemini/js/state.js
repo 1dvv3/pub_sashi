@@ -104,12 +104,27 @@ export function saveState() {
   }
 }
 
+function mergeState(parsed) {
+  const def = createDefaultState();
+  return {
+    ...def,
+    ...parsed,
+    character: { ...def.character, ...(parsed.character || {}) },
+    baseStats: { ...def.baseStats, ...(parsed.baseStats || {}) },
+    hp: { ...def.hp, ...(parsed.hp || {}) },
+    deathSaves: { ...def.deathSaves, ...(parsed.deathSaves || {}) },
+    skills: { ...def.skills, ...(parsed.skills || {}) },
+    attacks: Array.isArray(parsed.attacks) ? parsed.attacks : def.attacks,
+    equipment: Array.isArray(parsed.equipment) ? parsed.equipment : def.equipment
+  };
+}
+
 export function loadState() {
   let data = localStorage.getItem(STORAGE_KEY) || sessionStorage.getItem(STORAGE_KEY);
   if (data) {
     try {
       const parsed = JSON.parse(data);
-      state = { ...createDefaultState(), ...parsed };
+      state = mergeState(parsed);
     } catch (e) {
       console.error('Load failed:', e);
       state = createDefaultState();
@@ -143,7 +158,7 @@ export function importJSON(file) {
     reader.onload = (e) => {
       try {
         const parsed = JSON.parse(e.target.result);
-        state = { ...createDefaultState(), ...parsed };
+        state = mergeState(parsed);
         saveState();
         resolve(state);
       } catch (err) {

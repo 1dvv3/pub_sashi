@@ -176,6 +176,7 @@ function bindEvents() {
         const bonus = document.getElementById('atk-bonus')?.value.trim() || '';
         const damage = document.getElementById('atk-damage')?.value.trim() || '';
         const type = document.getElementById('atk-type')?.value.trim() || '';
+        if (!state.attacks) state.attacks = [];
         state.attacks.push({ name, bonus, damage, type });
         saveState();
         updateCombat();
@@ -188,6 +189,7 @@ function bindEvents() {
       }
       case 'removeAttack': {
         const idx = parseInt(el.dataset.index);
+        if (!state.attacks) state.attacks = [];
         const removed = state.attacks.splice(idx, 1);
         saveState();
         updateCombat();
@@ -198,6 +200,7 @@ function bindEvents() {
         const name = document.getElementById('equip-name')?.value.trim();
         if (!name) { showToast('Enter item name', 'error'); break; }
         const qty = parseInt(document.getElementById('equip-qty')?.value) || 1;
+        if (!state.equipment) state.equipment = [];
         state.equipment.push({ name, qty });
         saveState();
         updateCombat();
@@ -208,6 +211,7 @@ function bindEvents() {
       }
       case 'removeEquipment': {
         const idx = parseInt(el.dataset.index);
+        if (!state.equipment) state.equipment = [];
         const removed = state.equipment.splice(idx, 1);
         saveState();
         updateCombat();
@@ -219,7 +223,6 @@ function bindEvents() {
           resetState();
           recalcDerived();
           initUI();
-          bindMainEvents(main);
           showToast('Character reset', 'error');
         }
         break;
@@ -254,7 +257,6 @@ function bindEvents() {
       importJSON(el.files[0]).then(() => {
         recalcDerived();
         initUI();
-        bindMainEvents(main);
         showToast('Character imported!', 'success');
       }).catch(err => {
         showToast(err.message, 'error');
@@ -296,10 +298,6 @@ function bindEvents() {
     }
   });
 
-  // Store reference for re-binding after reset
-  bindMainEvents = () => {};
 }
-
-let bindMainEvents;
 
 document.addEventListener('DOMContentLoaded', init);

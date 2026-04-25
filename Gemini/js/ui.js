@@ -369,7 +369,7 @@ export function updateOverview() {
     const mod = Logic.calcModifier(total);
     return `
       <div class="stat-circle">
-        <div class="stat-circle-label">${stat}</div>
+        <div class="stat-circle-label">${RULES.STAT_NAMES[stat]}</div>
         <div class="stat-circle-score">${total}</div>
         <div class="stat-circle-mod">${Logic.formatModifier(mod)}</div>
       </div>`;
@@ -480,16 +480,17 @@ export function updateCombat() {
   // Attacks & Spellcasting
   const atkList = document.getElementById('attacks-list');
   if (atkList) {
-    if (state.attacks.length === 0) {
+    const attacks = state.attacks || [];
+    if (attacks.length === 0) {
       atkList.innerHTML = '<div class="empty-list">No attacks added yet</div>';
     } else {
-      atkList.innerHTML = state.attacks.map((atk, i) => `
+      atkList.innerHTML = attacks.map((atk, i) => `
         <div class="list-entry">
-          <span class="list-entry-name">${esc(atk.name)}</span>
-          <span class="list-entry-detail">${esc(atk.bonus)}</span>
-          <span class="list-entry-detail">${esc(atk.damage)}</span>
-          <span class="list-entry-detail">${esc(atk.type)}</span>
-          <button class="btn-remove" data-action="removeAttack" data-index="${i}" aria-label="Remove ${esc(atk.name)}">✕</button>
+          <span class="list-entry-name">${esc(atk.name || '')}</span>
+          <span class="list-entry-detail">${esc(atk.bonus || '')}</span>
+          <span class="list-entry-detail">${esc(atk.damage || '')}</span>
+          <span class="list-entry-detail">${esc(atk.type || '')}</span>
+          <button class="btn-remove" data-action="removeAttack" data-index="${i}" aria-label="Remove ${esc(atk.name || '')}">✕</button>
         </div>`).join('');
     }
   }
@@ -497,14 +498,15 @@ export function updateCombat() {
   // Equipment
   const equipList = document.getElementById('equipment-list');
   if (equipList) {
-    if (state.equipment.length === 0) {
+    const equipment = state.equipment || [];
+    if (equipment.length === 0) {
       equipList.innerHTML = '<div class="empty-list">No equipment added yet</div>';
     } else {
-      equipList.innerHTML = state.equipment.map((item, i) => `
+      equipList.innerHTML = equipment.map((item, i) => `
         <div class="list-entry">
-          <span class="list-entry-name">${esc(item.name)}</span>
-          <span class="list-entry-qty">×${item.qty}</span>
-          <button class="btn-remove" data-action="removeEquipment" data-index="${i}" aria-label="Remove ${esc(item.name)}">✕</button>
+          <span class="list-entry-name">${esc(item.name || '')}</span>
+          <span class="list-entry-qty">×${item.qty || 1}</span>
+          <button class="btn-remove" data-action="removeEquipment" data-index="${i}" aria-label="Remove ${esc(item.name || '')}">✕</button>
         </div>`).join('');
     }
   }
@@ -550,6 +552,7 @@ export function showToast(message, type = 'info') {
 
 // ===== HELPERS =====
 function esc(str) {
+  if (str == null) return '';
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
