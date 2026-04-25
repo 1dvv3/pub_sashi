@@ -262,11 +262,18 @@ textarea.input { min-height: 100px; resize: vertical; line-height: 1.6; }
 }
 .stat-row:hover { border-color: var(--border-accent); }
 .stat-name {
-  width: 40px;
+  width: 90px;
   font-weight: 700;
   font-size: var(--fs-sm);
   color: var(--accent);
+  letter-spacing: 0.5px;
+}
+.stat-abbr {
+  width: 30px;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
   letter-spacing: 1px;
+  text-align: center;
 }
 .stat-controls {
   display: flex;
@@ -658,6 +665,81 @@ textarea.input { min-height: 100px; resize: vertical; line-height: 1.6; }
 }
 .toast.success { border-color: var(--success); }
 .toast.error { border-color: var(--danger); }
+
+/* ===== COMPACT TEXTAREAS ===== */
+textarea.input.textarea-sm { min-height: 60px; font-size: var(--fs-sm); }
+
+/* ===== LIST ENTRIES (Attacks / Equipment) ===== */
+.add-row-form {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.add-row-form .input { min-height: 36px; padding: 6px 10px; font-size: var(--fs-sm); }
+.add-row-form .input:first-child { flex: 1; min-width: 80px; }
+.input-sm { min-height: 36px; padding: 6px 10px; font-size: var(--fs-sm); }
+.btn-add {
+  width: 36px; height: 36px; min-height: 36px;
+  padding: 0; font-size: var(--fs-lg); flex-shrink: 0;
+}
+.list-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+  transition: border-color var(--duration) var(--ease);
+}
+.list-entry:hover { border-color: var(--border-accent); }
+.list-entry-name {
+  flex: 1;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list-entry-detail {
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  padding: 2px 6px;
+  background: var(--bg-input);
+  border-radius: 4px;
+}
+.list-entry-qty {
+  font-size: var(--fs-sm);
+  color: var(--accent);
+  font-weight: 600;
+  min-width: 30px;
+  text-align: center;
+}
+.btn-remove {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: all var(--duration) var(--ease);
+  flex-shrink: 0;
+}
+.btn-remove:hover { color: var(--danger); border-color: var(--danger); background: var(--danger-dim); }
+.empty-list {
+  text-align: center;
+  padding: 12px;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  font-style: italic;
+}
 
 /* ===== UTILITIES ===== */
 .text-center { text-align: center; }

@@ -170,6 +170,50 @@ function bindEvents() {
         showToast('Character exported!', 'success');
         break;
       }
+      case 'addAttack': {
+        const name = document.getElementById('atk-name')?.value.trim();
+        if (!name) { showToast('Enter attack name', 'error'); break; }
+        const bonus = document.getElementById('atk-bonus')?.value.trim() || '';
+        const damage = document.getElementById('atk-damage')?.value.trim() || '';
+        const type = document.getElementById('atk-type')?.value.trim() || '';
+        state.attacks.push({ name, bonus, damage, type });
+        saveState();
+        updateCombat();
+        document.getElementById('atk-name').value = '';
+        document.getElementById('atk-bonus').value = '';
+        document.getElementById('atk-damage').value = '';
+        document.getElementById('atk-type').value = '';
+        showToast(`Added ${name}`, 'success');
+        break;
+      }
+      case 'removeAttack': {
+        const idx = parseInt(el.dataset.index);
+        const removed = state.attacks.splice(idx, 1);
+        saveState();
+        updateCombat();
+        showToast(`Removed ${removed[0]?.name || 'attack'}`, 'error');
+        break;
+      }
+      case 'addEquipment': {
+        const name = document.getElementById('equip-name')?.value.trim();
+        if (!name) { showToast('Enter item name', 'error'); break; }
+        const qty = parseInt(document.getElementById('equip-qty')?.value) || 1;
+        state.equipment.push({ name, qty });
+        saveState();
+        updateCombat();
+        document.getElementById('equip-name').value = '';
+        document.getElementById('equip-qty').value = '1';
+        showToast(`Added ${name}`, 'success');
+        break;
+      }
+      case 'removeEquipment': {
+        const idx = parseInt(el.dataset.index);
+        const removed = state.equipment.splice(idx, 1);
+        saveState();
+        updateCombat();
+        showToast(`Removed ${removed[0]?.name || 'item'}`, 'error');
+        break;
+      }
       case 'reset': {
         if (confirm('Are you sure you want to reset this character? This cannot be undone.')) {
           resetState();
@@ -219,6 +263,10 @@ function bindEvents() {
   });
 
   // Input delegation (text fields, number inputs)
+  // Fields that map directly to top-level state keys via data-field
+  const DIRECT_FIELDS = ['notes','proficiencies','languages','dciNumber','faction',
+                         'personalityTraits','ideals','bonds','flaws','featuresTraits'];
+
   main.addEventListener('input', (e) => {
     const el = e.target;
 
@@ -226,8 +274,8 @@ function bindEvents() {
       state.character.name = el.value;
       saveState();
     }
-    else if (el.dataset.field === 'notes') {
-      state.notes = el.value;
+    else if (el.dataset.field && DIRECT_FIELDS.includes(el.dataset.field)) {
+      state[el.dataset.field] = el.value;
       saveState();
     }
     else if (el.id === 'ac-input') {

@@ -67,6 +67,21 @@ function createDefaultState() {
     speed: 30,
     deathSaves: { successes: 0, failures: 0 },
     skills,
+    // Overview – optional identity fields
+    proficiencies: '',
+    languages: '',
+    dciNumber: '',
+    faction: '',
+    // Overview – character personality / roleplay
+    personalityTraits: '',
+    ideals: '',
+    bonds: '',
+    flaws: '',
+    featuresTraits: '',
+    // Combat – attacks & spellcasting list
+    attacks: [],   // [{name, bonus, damage, type}]
+    // Combat – equipment list
+    equipment: [],  // [{name, qty}]
     notes: '',
     sessionMode: 'campaign',
     created: new Date().toISOString(),

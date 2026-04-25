@@ -84,6 +84,18 @@ function overviewPanel() {
           <select class="select" id="char-class" data-field="class">${classOptions}</select>
         </div>
       </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="card-label" for="char-dci">DCI Number</label>
+          <input class="input" type="text" id="char-dci" data-field="dciNumber"
+                 placeholder="Optional" value="${esc(state.dciNumber)}" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label class="card-label" for="char-faction">Faction</label>
+          <input class="input" type="text" id="char-faction" data-field="faction"
+                 placeholder="Optional" value="${esc(state.faction)}" maxlength="50">
+        </div>
+      </div>
     </div>
 
     <div class="card">
@@ -107,6 +119,50 @@ function overviewPanel() {
           <div class="combat-stat-label">HP</div>
         </div>
       </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Proficiencies & Languages</div>
+      <div class="form-group">
+        <label class="card-label" for="char-proficiencies">Other Proficiencies</label>
+        <textarea class="input textarea-sm" id="char-proficiencies" data-field="proficiencies"
+                  placeholder="Armor, weapons, tools…">${esc(state.proficiencies)}</textarea>
+      </div>
+      <div class="form-group">
+        <label class="card-label" for="char-languages">Languages</label>
+        <textarea class="input textarea-sm" id="char-languages" data-field="languages"
+                  placeholder="Common, Elvish…">${esc(state.languages)}</textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Personality</div>
+      <div class="form-group">
+        <label class="card-label" for="char-personality">Personality Traits</label>
+        <textarea class="input textarea-sm" id="char-personality" data-field="personalityTraits"
+                  placeholder="Describe your character's personality…">${esc(state.personalityTraits)}</textarea>
+      </div>
+      <div class="form-group">
+        <label class="card-label" for="char-ideals">Ideals</label>
+        <textarea class="input textarea-sm" id="char-ideals" data-field="ideals"
+                  placeholder="What drives your character…">${esc(state.ideals)}</textarea>
+      </div>
+      <div class="form-group">
+        <label class="card-label" for="char-bonds">Bonds</label>
+        <textarea class="input textarea-sm" id="char-bonds" data-field="bonds"
+                  placeholder="Connections to people, places, events…">${esc(state.bonds)}</textarea>
+      </div>
+      <div class="form-group">
+        <label class="card-label" for="char-flaws">Flaws</label>
+        <textarea class="input textarea-sm" id="char-flaws" data-field="flaws"
+                  placeholder="Weaknesses, vices…">${esc(state.flaws)}</textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Features & Traits</div>
+      <textarea class="input" id="char-features" data-field="featuresTraits"
+                placeholder="Racial traits, class features, feats…">${esc(state.featuresTraits)}</textarea>
     </div>
 
     <div class="card">
@@ -177,6 +233,28 @@ function combatPanel() {
         <div class="combat-stat-value" id="combat-speed">${state.speed}</div>
         <div class="combat-stat-label">Speed</div>
         <div class="mt-sm"><input class="input" type="number" id="speed-input" value="${state.speed}" min="0" max="120" style="width:60px;margin:0 auto;text-align:center"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Attacks & Spellcasting</div>
+      <div id="attacks-list"></div>
+      <div class="add-row-form" id="attack-form">
+        <input class="input input-sm" type="text" id="atk-name" placeholder="Name" maxlength="30">
+        <input class="input input-sm" type="text" id="atk-bonus" placeholder="+Hit" maxlength="6" style="width:60px">
+        <input class="input input-sm" type="text" id="atk-damage" placeholder="Damage" maxlength="20" style="width:80px">
+        <input class="input input-sm" type="text" id="atk-type" placeholder="Type" maxlength="15" style="width:70px">
+        <button class="btn btn-primary btn-sm btn-add" data-action="addAttack" id="btn-add-attack">+</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Equipment</div>
+      <div id="equipment-list"></div>
+      <div class="add-row-form" id="equip-form">
+        <input class="input input-sm" type="text" id="equip-name" placeholder="Item name" maxlength="40">
+        <input class="input input-sm" type="number" id="equip-qty" placeholder="Qty" min="1" max="999" value="1" style="width:60px">
+        <button class="btn btn-primary btn-sm btn-add" data-action="addEquipment" id="btn-add-equip">+</button>
       </div>
     </div>
 
@@ -325,7 +403,8 @@ export function updateStats() {
     const cost = RULES.POINT_COSTS[base];
     return `
       <div class="stat-row">
-        <span class="stat-name">${stat}</span>
+        <span class="stat-name">${RULES.STAT_NAMES[stat]}</span>
+        <span class="stat-abbr">${stat}</span>
         <div class="stat-controls">
           <button class="stepper-btn" data-action="decStat" data-stat="${stat}"
                   ${!Logic.canDecrement(state.baseStats, stat) ? 'disabled' : ''} aria-label="Decrease ${stat}">−</button>
@@ -396,6 +475,38 @@ export function updateCombat() {
     status.textContent = '';
     if (state.deathSaves.successes >= 3) { status.classList.add('stable'); status.textContent = '✦ Stabilized ✦'; }
     else if (state.deathSaves.failures >= 3) { status.classList.add('dead'); status.textContent = '✦ Dead ✦'; }
+  }
+
+  // Attacks & Spellcasting
+  const atkList = document.getElementById('attacks-list');
+  if (atkList) {
+    if (state.attacks.length === 0) {
+      atkList.innerHTML = '<div class="empty-list">No attacks added yet</div>';
+    } else {
+      atkList.innerHTML = state.attacks.map((atk, i) => `
+        <div class="list-entry">
+          <span class="list-entry-name">${esc(atk.name)}</span>
+          <span class="list-entry-detail">${esc(atk.bonus)}</span>
+          <span class="list-entry-detail">${esc(atk.damage)}</span>
+          <span class="list-entry-detail">${esc(atk.type)}</span>
+          <button class="btn-remove" data-action="removeAttack" data-index="${i}" aria-label="Remove ${esc(atk.name)}">✕</button>
+        </div>`).join('');
+    }
+  }
+
+  // Equipment
+  const equipList = document.getElementById('equipment-list');
+  if (equipList) {
+    if (state.equipment.length === 0) {
+      equipList.innerHTML = '<div class="empty-list">No equipment added yet</div>';
+    } else {
+      equipList.innerHTML = state.equipment.map((item, i) => `
+        <div class="list-entry">
+          <span class="list-entry-name">${esc(item.name)}</span>
+          <span class="list-entry-qty">×${item.qty}</span>
+          <button class="btn-remove" data-action="removeEquipment" data-index="${i}" aria-label="Remove ${esc(item.name)}">✕</button>
+        </div>`).join('');
+    }
   }
 }
 
