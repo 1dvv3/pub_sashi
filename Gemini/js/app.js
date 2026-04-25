@@ -1,12 +1,13 @@
 // ===== APP INITIALIZATION & EVENT HANDLING =====
 import { state, RULES, saveState, loadState, resetState, exportJSON, importJSON } from './state.js';
 import * as Logic from './logic.js';
-import { initUI, switchTab, updateAll, updateStats, updateCombat, updateOverview, updateProgression, showToast } from './ui.js';
+import { initUI, switchTab, updateAll, updateStats, updateCombat, updateOverview, updateProgression, showToast, updateHeader } from './ui.js';
 
 function init() {
   loadState();
   recalcDerived();
   initUI();
+  updateHeader();
   bindEvents();
 }
 
@@ -130,7 +131,7 @@ function bindEvents() {
         if (state.character.level > oldLevel) {
           showToast(`Level up! Now level ${state.character.level}`, 'success');
         } else {
-          showToast(`+${amount} XP`, 'success');
+          showToast(`+${amount} Experience`, 'success');
         }
         break;
       }
@@ -142,7 +143,7 @@ function bindEvents() {
         updateProgression();
         updateOverview();
         updateCombat();
-        showToast(`XP set to ${state.character.xp.toLocaleString()}`, 'success');
+        showToast(`Experience set to ${state.character.xp.toLocaleString()}`, 'success');
         break;
       }
       case 'setMode': {
@@ -150,8 +151,8 @@ function bindEvents() {
         const newMode = el.dataset.mode;
         if (oldMode === newMode) return;
         // Clear old storage
-        if (oldMode === 'campaign') localStorage.removeItem('sashi_character');
-        else sessionStorage.removeItem('sashi_character');
+        if (oldMode === 'campaign') localStorage.removeItem('dnd_character');
+        else sessionStorage.removeItem('dnd_character');
         state.sessionMode = newMode;
         saveState();
         // Update toggle UI
@@ -223,6 +224,7 @@ function bindEvents() {
           resetState();
           recalcDerived();
           initUI();
+          updateHeader();
           showToast('Character reset', 'error');
         }
         break;
@@ -274,6 +276,7 @@ function bindEvents() {
 
     if (el.dataset.field === 'name') {
       state.character.name = el.value;
+      updateHeader();
       saveState();
     }
     else if (el.dataset.field && DIRECT_FIELDS.includes(el.dataset.field)) {

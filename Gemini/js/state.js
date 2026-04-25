@@ -92,7 +92,7 @@ function createDefaultState() {
 export let state = createDefaultState();
 
 // ===== PERSISTENCE =====
-const STORAGE_KEY = 'sashi_character';
+const STORAGE_KEY = 'dnd_character';
 
 export function saveState() {
   state.lastModified = new Date().toISOString();
@@ -147,7 +147,7 @@ export function exportJSON() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `sashi_${state.character.name || 'character'}_${Date.now()}.json`;
+  a.download = `character_${state.character.name || 'sheet'}_${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }

@@ -116,7 +116,7 @@ function overviewPanel() {
         </div>
         <div class="combat-stat">
           <div class="combat-stat-value" id="ov-hp">${state.hp.current}/${state.hp.max}</div>
-          <div class="combat-stat-label">HP</div>
+          <div class="combat-stat-label">Hit Points</div>
         </div>
       </div>
     </div>
@@ -215,14 +215,14 @@ function combatPanel() {
     </div>
 
     <div class="hp-temp">
-      <span class="hp-temp-label">Temp HP</span>
+      <span class="hp-temp-label">Temporary Hit Points</span>
       <input class="input" type="number" id="temp-hp" value="${state.hp.temp}" min="0" max="999">
     </div>
 
     <div class="combat-row">
       <div class="combat-stat">
         <div class="combat-stat-value" id="combat-ac">${state.ac}</div>
-        <div class="combat-stat-label">AC</div>
+        <div class="combat-stat-label">Armor Class</div>
         <div class="mt-sm"><input class="input" type="number" id="ac-input" value="${state.ac}" min="1" max="30" style="width:60px;margin:0 auto;text-align:center"></div>
       </div>
       <div class="combat-stat">
@@ -286,13 +286,13 @@ function progressionPanel() {
     <div class="xp-section">
       <div class="xp-bar-container">
         <div class="xp-info">
-          <span id="xp-current">${state.character.xp.toLocaleString()} XP</span>
-          <span id="xp-next">Next: ${Logic.xpForNextLevel(state.character.level).toLocaleString()} XP</span>
+          <span id="xp-current">${state.character.xp.toLocaleString()} Experience</span>
+          <span id="xp-next">Next: ${Logic.xpForNextLevel(state.character.level).toLocaleString()} Experience</span>
         </div>
         <div class="xp-bar"><div class="xp-bar-fill" id="xp-bar-fill"></div></div>
         <div class="xp-controls">
           <input class="input" type="number" id="xp-amount" value="100" min="0" max="355000">
-          <button class="btn btn-primary btn-sm" data-action="addXP" id="btn-add-xp">+ Add XP</button>
+          <button class="btn btn-primary btn-sm" data-action="addXP" id="btn-add-xp">+ Add Experience</button>
           <button class="btn btn-secondary btn-sm" data-action="setXP" id="btn-set-xp">Set</button>
         </div>
       </div>
@@ -404,13 +404,12 @@ export function updateStats() {
     return `
       <div class="stat-row">
         <span class="stat-name">${RULES.STAT_NAMES[stat]}</span>
-        <span class="stat-abbr">${stat}</span>
         <div class="stat-controls">
           <button class="stepper-btn" data-action="decStat" data-stat="${stat}"
-                  ${!Logic.canDecrement(state.baseStats, stat) ? 'disabled' : ''} aria-label="Decrease ${stat}">−</button>
+                  ${!Logic.canDecrement(state.baseStats, stat) ? 'disabled' : ''} aria-label="Decrease ${RULES.STAT_NAMES[stat]}">−</button>
           <span class="stat-value">${base}</span>
           <button class="stepper-btn" data-action="incStat" data-stat="${stat}"
-                  ${!Logic.canIncrement(state.baseStats, stat) ? 'disabled' : ''} aria-label="Increase ${stat}">+</button>
+                  ${!Logic.canIncrement(state.baseStats, stat) ? 'disabled' : ''} aria-label="Increase ${RULES.STAT_NAMES[stat]}">+</button>
         </div>
         ${bonus ? `<span class="stat-bonus">+${bonus}</span>` : '<span class="stat-bonus"></span>'}
         <span class="stat-modifier">${Logic.formatModifier(mod)}</span>
@@ -430,7 +429,7 @@ export function updateStats() {
         <input class="skill-check" type="checkbox" data-action="toggleSkill" data-skill="${skill}"
                ${state.skills[skill] ? 'checked' : ''}>
         <span class="skill-name">${skill}</span>
-        <span class="skill-stat">${stat}</span>
+        <span class="skill-stat">${RULES.STAT_NAMES[stat]}</span>
         <span class="skill-mod">${Logic.formatModifier(mod)}</span>
       </label>`;
   }).join('');
@@ -522,8 +521,8 @@ export function updateProgression() {
   const curXP = document.getElementById('xp-current');
   const nextXP = document.getElementById('xp-next');
   const bar = document.getElementById('xp-bar-fill');
-  if (curXP) curXP.textContent = `${state.character.xp.toLocaleString()} XP`;
-  if (nextXP) nextXP.textContent = level >= 20 ? 'MAX LEVEL' : `Next: ${Logic.xpForNextLevel(level).toLocaleString()} XP`;
+  if (curXP) curXP.textContent = `${state.character.xp.toLocaleString()} Experience`;
+  if (nextXP) nextXP.textContent = level >= 20 ? 'MAX LEVEL' : `Next: ${Logic.xpForNextLevel(level).toLocaleString()} Experience`;
   if (bar) bar.style.width = `${Logic.xpProgress(state.character.xp, level) * 100}%`;
 
   // Milestones
@@ -534,7 +533,7 @@ export function updateProgression() {
       const reached = state.character.xp >= xp;
       return `<div style="display:flex;justify-content:space-between;padding:6px 8px;font-size:var(--fs-sm);
                           color:${reached ? 'var(--accent)' : 'var(--text-muted)'}; border-bottom:1px solid var(--border)">
-        <span>Level ${lv}</span><span>${xp.toLocaleString()} XP</span>
+        <span>Level ${lv}</span><span>${xp.toLocaleString()} Experience</span>
       </div>`;
     }).join('');
   }
@@ -548,6 +547,20 @@ export function showToast(message, type = 'info') {
   toast.className = `toast show ${type}`;
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => { toast.className = 'toast'; }, 2500);
+}
+
+// ===== UPDATE HEADER =====
+export function updateHeader() {
+  const logo = document.getElementById('char-logo');
+  if (!logo) return;
+  const name = state.character.name?.trim();
+  if (name) {
+    logo.textContent = name;
+    logo.classList.add('animate-in');
+  } else {
+    logo.textContent = "D&D 5e Character Sheet";
+    logo.classList.remove('animate-in');
+  }
 }
 
 // ===== HELPERS =====
